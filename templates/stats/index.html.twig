@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ comparison.packages }}
+{% endblock %}
+
+{% block body %}
+    <div class="row mt-3">
+        <div class="col-sm-12 text-center">
+            <h1 class="display-3 text-info">Packagist Stats</h1>
+            <p class="lead">
+                Comparing downloads of packages over time
+                <br />
+                <strong class="text-info">{{ comparison.packages }}</strong>
+                <br />
+                from <strong class="text-info">{{ comparison.from }}</strong> to <strong class="text-info">{{ comparison.to }}</strong> average <strong class="text-info">{{ comparison.average }}</strong>
+            </p>
+        </div>
+    </div>
+    {% for label, messages in app.flashes(['info', 'danger']) %}
+        {% for message in messages %}
+            <div class="row">
+                <div class="alert alert-{{ label }}">{{ message }}</div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <div class="row mb-5">
+        <div class="col-sm-4">
+            <div class="list-group" style="overflow-y:scroll; height:500px;">
+                {% for package, data in packages %}
+                    <div
+                            data-controller="package-show"
+                            data-name="{{ package }}"
+                            data-url="{{ data.url }}"
+                            class="list-group-item list-group-item-action" aria-current="true"
+                    >
+                        <div class="d-flex justify-content-between">
+                            <h3
+                                    class="mb-1" style="color: {{ data.color }}"
+                                    title="{{ data.desc }}"
+                            >
+                                <a href="{{ data.url }}" target="_blank" class="text-secondary"><i class="fa fa-external-link-alt fa-xs"></i></a>
+                                {{ package }}
+                            </h3>
+                            <small title="First release date"><em>{{ data.since|date('Y-m-d') }}</em></small>
+                        </div>
+                        <p class="mb-1">
+                            <u title="Total downloads since first release, and average month/day downloads" class="text-secondary">Downloads:</u>
+                            <ul class="list-unstyled">
+                                {% for _k, _v in data.downloads %}
+                                    <li>
+                                        <span class="badge rounded-pill bg-secondary">{{ _k }}: {{ _v|number_format }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </p>
+                        <button
+                                data-action="package-show#info"
+                                class="btn btn-sm btn-secondary"
+                        >
+                            <i class="fas fa-info-circle"></i> More info
+                        </button>
+                        <span data-package-show-target="error" class="text-danger"></span>
+                        <div data-package-show-target="info"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-sm-8">
+            {{ render_chart(chart) }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12">
+            <em>
+                <i class="fas fa-info-circle"></i> query string filtering
+                <br />• use the <strong>?p[]=symfony/console&p[]=symfony/http-client</strong> to compare packages
+                <br />• change from date with <strong>&f=2020-11</strong> and to date with <strong>&t=2021-04</strong>
+            </em>
+            <hr>
+            <em>
+                <i class="fas fa-list-alt"></i> todo list
+                <br />• make packages selection dynamic
+                <br />• make from/to fields dynamic
+                <br />• improve UI/UX ¯\_(ツ)_/¯
+            </em>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12 mt-5 mb-5">
+            <p class="lead text-info">
+                Made by <a href="http://antoine.makdessi.free.fr" target="_blank">@amakdessi</a> for fun to test things.
+                <br />
+                Thanks to <a href="https://packagist.org" target="_blank">packagist.org</a> & <a href="http://github.com/" target="_blank">github.com</a> for data, <a href="https://github.com/symfony" target="https://github.com/symfony">Symfony</a> framework and <span title="Symfony HttpClient, Webpack Encore, UX + Bootstrap + Fontawesome + Axios + ...">components/libraries</span>.
+            </p>
+        </div>
+    </div>
+{% endblock %}

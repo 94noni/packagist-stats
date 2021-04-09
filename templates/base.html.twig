@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+    <!--
+    http://antoine.makdessi.free.fr
+    https://twitter.com/amakdessi
+    -->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Packagist Stats{% endblock %}</title>
+        {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
+        {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
+    </head>
+    <body>
+        <div class="container-fluid">
+            {% block body %}{% endblock %}
+        </div>
+    </body>
+</html>
